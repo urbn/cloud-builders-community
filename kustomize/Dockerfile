@@ -5,6 +5,8 @@ ENV VERSION v${VER}
 
 COPY kustomize.bash /builder/kustomize.bash
 
+ENV KUBEVAL_VERSION 0.9.0
+
 RUN apt-get update && \
     apt-get install -y wget && \
     wget https://github.com/kubernetes-sigs/kustomize/releases/download/${VERSION}/kustomize_${VER}_linux_amd64 && \
@@ -12,6 +14,9 @@ RUN apt-get update && \
     mv kustomize_${VER}_linux_amd64 /builder/kustomize/kustomize && \
     chmod +x /builder/kustomize/kustomize && \
     chmod +x /builder/kustomize.bash && \
+    wget https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz && \
+    tar xf kubeval-linux-amd64.tar.gz && \
+    cp kubeval /usr/local/bin && \
     apt-get remove --purge -y wget && \
     apt-get --purge -y autoremove && \
     apt-get clean && \
